@@ -2,14 +2,12 @@ package com.example.ex02.controller;
 
 import com.example.ex02.domain.MemberVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 @Slf4j
 
@@ -64,7 +62,47 @@ public class ExampleController {
     // 별도로 반환값을 입력하지 않으면 요청이 들어온 그대로의 URL로 이동한다 (기본적으로 resources/templates에서 찾는다)
     @GetMapping("ex07")
     public void ex07(){
-        
+
     }
 
+    @GetMapping("ex08")
+    public String ex08(){
+        return "/ex/ex08/ex08";
+    }
+    // 요청한 경로와 내가 보여주고 싶은 경로가 다르면 위와 같이 반환값을 주면 된다
+
+    @GetMapping("ex09")
+    public String ex09(String name, Model model /*HttpServletRequest request*/){
+//        request.setAttribute("name", name); // View에 name 필드로 name값 전달
+        // 보통 위와 같이 request 객체를 사용하지 않고, 아래처럼 model 객체를 사용하는 것이 일반적이다
+        model.addAttribute("name", name);
+        return "ex/ex09"; // 요청 URL과 같음
+    }
+    // 값을 View에 전달해서 거기서 써볼 것인데, JSP 때 썼던 EL문, JSTL문이 아닌 Thymeleaf 템플릿 엔진을 써보자
+
+    @GetMapping("ex10")
+    public String ex10(MemberVO memberVO){
+        return "/ex10";
+    }
+    // 위에처럼 Model 객체를 사용하여 전달하지도 않았는데 객체를 매개변수로 전달받았을 경우,
+    // 해당 객체의 필드명과 요청 파라미터를 자동으로 바인딩해준다.
+    // Model 객체를 쓰지 않으면, 해당 객체의 앞 글자를 소문자로 바꿔서 View쪽에서 바로 접근할 수가 있다
+
+    @GetMapping("ex11")
+    public void ex11(MemberVO memberVO, @ModelAttribute("gender") String gender, @ModelAttribute("gold") int gold){
+//        model.addAttribute("gender", gender); // 근데 이렇게 하면 길어진다 (Model 객체도 써야 하고)
+    }
+    // 다만 위와 같은 경우, Model 전달자가 필요하다 (gender와 같은 객체가 아닌 그냥 일반 자료형은 자동으로 전달해주지 않음)
+    // 여기서 Model 전달자를 사용하지 않고, @ModelAttribute 어노테이션을 통해 바인딩할 수 있다.
+    // 여러 개여도 가능하지만, 여러 개면 매개변수 부분이 길어져서 보기가 좋지 않으니 그냥 Model 객체를 쓰는 게 좋다
+
+    @GetMapping("ex12")
+    public void ex12(@RequestParam("datas") ArrayList<String> datas){
+        datas.forEach(log::info);
+    }
 }
+
+
+
+
+
