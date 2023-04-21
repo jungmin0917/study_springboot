@@ -49,7 +49,22 @@ public class MyBatisConfig {
         // 이제 매퍼의 경로, Config의 경로에 대해 이 SqlSessionFactory 객체에게 알려줘야 한다.
         // /src/main/resources 까지가 일종의 ClassPath로 등록이 되어 있기 때문에, 이것을 이용하자
         // applicationContext.getResource() 메소드로 클래스패스 기준으로 리소스를 찾는다.
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResource("classpath*:/mapper/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath*:/mapper/*.xml")); // 매퍼 경로 지정 (주의: 갖고 올 파일이 여러개면 getResource가 아닌 getResources 메소드를 사용해야 한다)
+
+        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/config/config.xml")); // Config 파일 경로 지정
+
+        try {
+            // 위에서 만든 SqlSessionFactoryBean 객체를 이용하여 SqlSessionFactory 객체 생성
+            SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBean.getObject();
+            // DBMS에서는 언더바(스네이크) 표기법으로 컬럼명을 작성하는데, 자바에서는 카멜 표기법으로 필드명을 작성하므로,
+            // setMapUnderscoreToCamelCase 설정을 true로 함으로써 자동으로 매핑을 가능하게 한다.
+            sqlSessionFactory.getConfiguration().setMapUnderscoreToCamelCase(true);
+
+            return sqlSessionFactory; // sqlSessionFactory 반환
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
     
 }
