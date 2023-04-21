@@ -3,10 +3,25 @@ server:
 
 # 이 부분에서 HikariConfig를 생성할 때의 설정을 적어주는 것이다.
 #JDBC datasource
+#spring:
+#  datasource:
+#    hikari:
+#      driver-class-name: oracle.jdbc.OracleDriver
+#      jdbc-url: jdbc:oracle:thin:@localhost:1521:XE
+#      username: hr
+#      password: hr
+  
+#  위의 것은 주석 처리하고, SQL 로깅을 테이블 형태로 출력하기 위해 아래로 바꿨음
+      
+#JDBC spy datasource
+log4jdbc:
+  spylogdelegator:
+    name: net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+
 spring:
   datasource:
     hikari:
-      driver-class-name: oracle.jdbc.OracleDriver
-      jdbc-url: jdbc:oracle:thin:@localhost:1521:XE
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:oracle:thin:@localhost:1521:XE
       username: hr
       password: hr

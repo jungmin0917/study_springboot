@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 반드시 메인 패키지 쪽에 있는 인터페이스와 1:1 연동을 시켜줘야 한다 -->
+<mapper namespace="com.example.ex01.mapper.ProductMapper">
+    <insert id="insert">
+        INSERT INTO JUNGMIN_PRODUCT
+        (PRODUCT_ID, PRODUCT_NAME, PRODUCT_STOCK, PRODUCT_PRICE)
+        VALUES(SEQ_PRODUCT.NEXTVAL, #{productName}, #{productStock}, #{productPrice})
+    </insert>
+</mapper>
