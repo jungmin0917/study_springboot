@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+# 이 부분에서 HikariConfig를 생성할 때의 설정을 적어주는 것이다.
+#JDBC datasource
+spring:
+  datasource:
+    hikari:
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:XE
+      username: hr
+      password: hr
