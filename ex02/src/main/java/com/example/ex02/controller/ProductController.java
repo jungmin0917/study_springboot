@@ -46,6 +46,8 @@ public class ProductController {
 
         return "/product/product-list";
     }
+    
+    // 파트1 끝
 }
 
 
