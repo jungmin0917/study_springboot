@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 추가</title>
+</head>
+<body>
+<!-- th:object의 값으로는 객체를 적는다 -->
+    <form action="" th:object="${productVO}">
+<!--    그러면 form 내부에서 ${객체명.필드명} 할 필요 없이 *{필드명}만 입력해도 사용 가능하다 -->
+<!--    th:field를 사용하면 값에 입력한 것이 id, name으로 자동으로 들어간다    -->
+        <input type="text" th:field="*{productId}">
+        <input type="text" th:field="*{productName}">
+        <input type="text" th:field="*{productStock}">
+        <input type="text" th:field="*{productPrice}">
+        <input type="text" th:field="*{registerDate}">
+        <input type="text" th:field="*{updateDate}">
+
+    </form>
+</body>
+</html>
