@@ -122,28 +122,8 @@
         <span th:class="${sort == 'recent' || sort == null ? 'on' : ''}" data-sort="recent">최신순</span>
         <span th:class="${sort == 'money' ? 'on' : ''}" data-sort="money">결제 금액순</span>
     </div>
-    <table border="1">
-        <tr>
-            <th>주문 번호</th>
-            <th>상품 번호</th>
-            <th>상품 이름</th>
-            <th>상품 금액</th>
-            <th>상품 개수</th>
-            <th>결제 금액</th>
-            <th>주문 날짜</th>
-        </tr>
-        <th:block th:each="order: ${orders}">
-            <tr th:object="${order}">
-                <td th:text="*{orderId}"></td>
-                <td th:text="*{productId}"></td>
-                <td th:text="*{productName}"></td>
-                <td th:text="*{productPrice}"></td>
-                <td th:text="*{productCount}"></td>
-                <td th:text="*{orderPrice}"></td>
-                <td th:text="*{orderDate}"></td>
-            </tr>
-        </th:block>
-    </table>
+
+    <div class="orderList"></div>
 </div>
 
 </body>
@@ -194,20 +174,75 @@
         });
     });
 
-    $orderList.on("click", function(){
-
-
+    // ajax 부분을 함수화(모듈화)함으로써 유지보수를 더욱 편하게 하였다
+    function showOrderList(sort){ // ajax로 주문 내역 불러오는 부분
+        console.log("showOrderList....." + sort)
         $.ajax({
-            url: "/order/list/" + $(".sort span.on").data("sort"), // 일단 기본적으로 sort는 null값
+            url: "/order/list/" + sort, // 일단 기본적으로 sort는 null값
             method: "GET",
             success: function(orders){
                 // 여기서 넘어온 값으로 위의 주문내역 부분 채워야 함
                 console.log(orders);
+
+                // 위의 주문내역 부분에 넣을 텍스트
+                let text = `
+                        <table border="1">
+                            <tr>
+                                <th>주문 번호</th>
+                                <th>상품 번호</th>
+                                <th>상품 이름</th>
+                                <th>상품 금액</th>
+                                <th>상품 개수</th>
+                                <th>결제 금액</th>
+                                <th>주문 날짜</th>
+                            </tr>
+                        `;
+
+                // foreach 문으로 순회하면서 텍스트 완성
+                orders.forEach(order => {
+                    text += `
+                            <tr>
+                                <td>${order.orderId}</td>
+                                <td>${order.productId}</td>
+                                <td>${order.productName}</td>
+                                <td>${order.productPrice}</td>
+                                <td>${order.productCount}</td>
+                                <td>${order.orderPrice}</td>
+                                <td>${order.orderDate}</td>
+                            </tr>
+                    `;
+                });
+
+                text += `
+                        </table>
+                `;
+
+                $(".orderList").html(text);
+                $("div.container2").show();
+
             },
             error: function(err){
                 console.error(err);
             }
         });
+    }
+
+    $("body").on("click", ".sort span", function(){
+        let sort = $(this).data("sort");
+        console.log(sort);
+
+        $(this).siblings().removeClass("on");
+        $(this).addClass("on");
+
+        showOrderList(sort);
+    });
+
+    $orderList.on("click", function(){
+        let sort = $(".sort span.on").data("sort");
+
+        console.log(sort);
+
+        showOrderList(sort);
     });
 
     $("body").on("click", ".productChoice", function(){
