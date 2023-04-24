@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>상품 목록</title>
     <style>
-        div#container{
+        div.container{
             margin: 0 auto;
             width: 1000px;
         }
@@ -37,10 +37,40 @@
             width: 100%;
         }
 
+        div.container2{
+            margin: 0 auto;
+            width: 1000px;
+            margin-top: 50px;
+            display: none;
+        }
+
+        .container2 table{
+            width: 100%;
+        }
+
+        .container2 button{
+            width: 100%;
+        }
+
+        .container2 .sort{
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .container2 .sort span{
+            cursor: pointer;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .container2 .sort span.on{
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-<div id="container">
+<div class="container">
     <button type="button" class="register-ready">상품 추가</button>
     <div class="register-wrap" th:object="${productForm}">
         <div>
@@ -82,16 +112,39 @@
     </table>
     <div class="buttons">
         <button type="button" id="order-done">주문 완료</button>
-        <button type="button" onclick="location.href='/order/list';">주문 내역</button>
+        <button type="button" id="order-list">주문 내역</button>
     </div>
 </div>
 
-<form th:action="@{/order/done}" method="post" name="order-form" id="order-form">
-    <input type="hidden" name="productId">
-    <input type="hidden" name="productCount">
-</form>
-
-
+<div class="container2">
+    <div class="sort">
+        <!--        최신순이 기본값이라 on 클래스 넣어 둠 -->
+        <span th:class="${sort == 'recent' || sort == null ? 'on' : ''}" data-sort="recent">최신순</span>
+        <span th:class="${sort == 'money' ? 'on' : ''}" data-sort="money">결제 금액순</span>
+    </div>
+    <table border="1">
+        <tr>
+            <th>주문 번호</th>
+            <th>상품 번호</th>
+            <th>상품 이름</th>
+            <th>상품 금액</th>
+            <th>상품 개수</th>
+            <th>결제 금액</th>
+            <th>주문 날짜</th>
+        </tr>
+        <th:block th:each="order: ${orders}">
+            <tr th:object="${order}">
+                <td th:text="*{orderId}"></td>
+                <td th:text="*{productId}"></td>
+                <td th:text="*{productName}"></td>
+                <td th:text="*{productPrice}"></td>
+                <td th:text="*{productCount}"></td>
+                <td th:text="*{orderPrice}"></td>
+                <td th:text="*{orderDate}"></td>
+            </tr>
+        </th:block>
+    </table>
+</div>
 
 </body>
 
@@ -108,6 +161,7 @@
     const $form = $("form#order-form");
     const $registerReady = $("button.register-ready");
     const $registerDone = $("input.register-done");
+    const $orderList = $("button#order-list");
 
     let $temp, i;
 
@@ -133,6 +187,22 @@
             data: JSON.stringify(param),
             success: function(res){
                 location.reload();
+            },
+            error: function(err){
+                console.error(err);
+            }
+        });
+    });
+
+    $orderList.on("click", function(){
+
+
+        $.ajax({
+            url: "/order/list/" + $(".sort span.on").data("sort"), // 일단 기본적으로 sort는 null값
+            method: "GET",
+            success: function(orders){
+                // 여기서 넘어온 값으로 위의 주문내역 부분 채워야 함
+                console.log(orders);
             },
             error: function(err){
                 console.error(err);
