@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+</head>
+<body>
+    <table border="1">
+<!--    주의! 이름이 같아서 헷갈릴 수 있는데 테이블 th랑 타임리프 th랑 다르다!    -->
+        <tr>
+            <th>상품 번호</th>
+            <th>상품 이름</th>
+            <th>상품 재고</th>
+            <th>상품 가격</th>
+            <th>등록 날짜</th>
+            <th>수정 날짜</th>
+        </tr>
+<!--    th:block은, iterable한 객체를 사용해 블록 처리를 하여 반복문을 돌리는 것이다    -->
+        <th:block th:each="product: ${products}">
+            <tr th:object="${product}">
+                <td th:text="*{productId}"></td>
+                <td th:text="*{productName}"></td>
+                <td th:text="*{productStock}"></td>
+                <td th:text="*{productPrice}"></td>
+                <td th:text="*{registerDate}"></td>
+                <td th:text="*{updateDate}"></td>
+            </tr>
+        </th:block>
+    </table>
+</body>
+</html>

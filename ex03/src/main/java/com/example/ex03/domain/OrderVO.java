@@ -18,6 +18,6 @@ import org.springframework.stereotype.Component;
 public class OrderVO {
     private Long orderId;
     private Long productId;
-    private int productCount;
+    private Long productCount;
     private String orderDate;
 }
