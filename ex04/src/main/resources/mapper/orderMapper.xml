@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 반드시 메인 패키지 쪽에 있는 인터페이스와 1:1 연동을 시켜줘야 한다 -->
+<!-- 계속 xml 쪽에 ; 넣는데 절대로 넣지 마라!! -->
+<mapper namespace="com.example.ex04.mapper.OrderMapper">
+    <insert id="insert">
+        INSERT INTO JUNGMIN_ORDER
+        (ORDER_ID, PRODUCT_ID, PRODUCT_COUNT)
+        VALUES(SEQ_ORDER.NEXTVAL, #{productId}, #{productCount})
+    </insert>
+
+    <select id="selectAll" resultType="orderDTO">
+        SELECT P.PRODUCT_ID, PRODUCT_NAME, PRODUCT_STOCK, PRODUCT_PRICE, REGISTER_DATE, UPDATE_DATE, ORDER_ID, PRODUCT_COUNT, ORDER_DATE, PRODUCT_PRICE * PRODUCT_COUNT AS ORDER_PRICE
+        FROM JUNGMIN_PRODUCT P JOIN JUNGMIN_ORDER O ON P.PRODUCT_ID = O.PRODUCT_ID
+        ORDER BY
+        /* 아래 쿼리에서는 sort라는 필드를 따로 받을 것이다 */
+        <choose>
+            <when test="sort == 'recent'.toString()">
+                ORDER_ID
+            </when>
+            <otherwise>
+                ORDER_PRICE
+            </otherwise>
+        </choose>
+        DESC
+    </select>
+</mapper>
