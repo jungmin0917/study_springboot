@@ -3,10 +3,13 @@ package com.example.ex03.service;
 // 원래 인터페이스 쓰지만 현재는 편의를 위해 그냥 클래스로 바로 구현한다
 
 import com.example.ex03.dao.OrderDAO;
+import com.example.ex03.domain.OrderDTO;
 import com.example.ex03.dao.ProductDAO;
 import com.example.ex03.domain.OrderVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor // 생성자 주입
@@ -26,6 +29,11 @@ public class OrderService {
         orderDAO.save(orderVO); // 그리고 주문을 넣는다
 
         // 이렇게 여러 쿼리를 하나의 서비스에 맞게 모아서 돌리는 것이 바로 Service 계층의 목적이다.
+    }
+
+//    주문 내역
+    public List<OrderDTO> getList(){
+        return orderDAO.findAll();
     }
 }
 

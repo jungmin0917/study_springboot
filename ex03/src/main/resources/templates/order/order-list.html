@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 내역</title>
+    <style>
+        div#container{
+            margin: 0 auto;
+            width: 1000px;
+        }
+        table{
+            width: 100%;
+        }
+        button{
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <table border="1">
+            <tr>
+                <th>주문 번호</th>
+                <th>상품 번호</th>
+                <th>상품 이름</th>
+                <th>상품 금액</th>
+                <th>상품 개수</th>
+                <th>결제 금액</th>
+                <th>주문 날짜</th>
+            </tr>
+            <th:block th:each="order: ${orders}">
+                <tr th:object="${order}">
+                    <td th:text="*{orderId}"></td>
+                    <td th:text="*{productId}"></td>
+                    <td th:text="*{productName}"></td>
+                    <td th:text="*{productPrice}"></td>
+                    <td th:text="*{productCount}"></td>
+                    <td th:text="*{orderPrice}"></td>
+                    <td th:text="*{orderDate}"></td>
+                </tr>
+            </th:block>
+        </table>
+        <button type="button" onclick="location.href='/product/list';">상품 목록</button>
+    </div>
+</body>
+
+<!-- jquery CDN -->
+<script
+src="https://code.jquery.com/jquery-3.6.4.min.js"
+integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+crossorigin="anonymous"></script>
+
+<script>
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

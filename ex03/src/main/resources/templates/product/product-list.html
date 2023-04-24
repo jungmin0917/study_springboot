@@ -3,38 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 목록</title>
+    <style>
+        div#container{
+            margin: 0 auto;
+            width: 1000px;
+        }
+
+        table{
+            width: 100%;
+        }
+
+        .buttons{
+            display: flex;
+            align-items: center;
+        }
+
+        .buttons button{
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
-    <table border="1">
-<!--    주의! 이름이 같아서 헷갈릴 수 있는데 테이블 th랑 타임리프 th랑 다르다!    -->
-        <tr>
-            <th>단일 선택</th>
-            <th>주문 개수</th>
-            <th>상품 번호</th>
-            <th>상품 이름</th>
-            <th>상품 재고</th>
-            <th>상품 가격</th>
-            <th>등록 날짜</th>
-            <th>수정 날짜</th>
-        </tr>
-<!--    th:block은, iterable한 객체를 사용해 블록 처리를 하여 반복문을 돌리는 것이다    -->
-        <th:block th:each="product: ${products}">
-            <tr th:object="${product}">
-                <td><input type="radio" name="productId" th:value="*{productId}"></td>
-                <td><input type="text" name="productCount" readonly></td>
-                <td th:text="*{productId}"></td>
-                <td th:text="*{productName}"></td>
-                <td th:text="*{productStock}"></td>
-                <td th:text="*{productPrice}"></td>
-                <td th:text="*{registerDate}"></td>
-                <td th:text="*{updateDate}"></td>
+    <div id="container">
+        <table border="1">
+    <!--    주의! 이름이 같아서 헷갈릴 수 있는데 테이블 th랑 타임리프 th랑 다르다!    -->
+            <tr>
+                <th>단일 선택</th>
+                <th>주문 개수</th>
+                <th>상품 번호</th>
+                <th>상품 이름</th>
+                <th>상품 재고</th>
+                <th>상품 가격</th>
+                <th>등록 날짜</th>
+                <th>수정 날짜</th>
             </tr>
-        </th:block>
-    </table>
+    <!--    th:block은, iterable한 객체를 사용해 블록 처리를 하여 반복문을 돌리는 것이다    -->
+            <th:block th:each="product: ${products}">
+                <tr th:object="${product}">
+                    <td><input type="radio" name="productId" th:value="*{productId}" class="productChoice"></td>
+                    <td><input type="text" class="productCount" readonly></td>
+                    <td th:text="*{productId}"></td>
+                    <td th:text="*{productName}"></td>
+                    <td th:text="*{productStock}"></td>
+                    <td th:text="*{productPrice}"></td>
+                    <td th:text="*{registerDate}"></td>
+                    <td th:text="*{updateDate}"></td>
+                </tr>
+            </th:block>
+        </table>
+        <div class="buttons">
+            <button type="button" id="order-done">주문 완료</button>
+            <button type="button" onclick="location.href='/order/list';">주문 내역</button>
+        </div>
+    </div>
+
+    <form th:action="@{/order/done}" method="post" name="order-form" id="order-form">
+        <input type="hidden" name="productId">
+        <input type="hidden" name="productCount">
+    </form>
 </body>
 
-<script>
+<!-- jquery CDN -->
+<script
+src="https://code.jquery.com/jquery-3.6.4.min.js"
+integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+crossorigin="anonymous"></script>
 
+<script>
+    const $radios = $("input[type='radio']");
+    const $inputs = $("input[class='productCount']");
+    const $done = $("button#order-done"); // 주문 완료 버튼
+    const $form = $("form#order-form");
+
+    let $temp, i;
+
+    $("body").on("click", ".productChoice", function(){
+        i = $radios.index(this); // 지금 선택된 radio의 인덱스 저장 (전역으로)
+        console.log(i);
+
+        if($temp){
+            $temp.prop("readOnly", true); // 다른 거 고르면 이전 거는 다시 readOnly를 true로 함
+            $temp.val("");
+        }
+
+        $inputs.eq(i).prop("readOnly", false); // 지금 선택한 radio 인덱스의 inputs 인덱스값 확인
+        $temp = $inputs.eq(i); // 현재 선택한 것을 temp에 담음
+    });
+
+    // $("body").on("click", $done, function(){
+    //     console.log("test");
+    // });
+
+    $done.on("click", function(){
+        $form.find("input[name='productId']").val($radios.eq(i).val());
+        $form.find("input[name='productCount']").val($inputs.eq(i).val());
+
+        $form.submit();
+    });
 </script>
 
 </html>

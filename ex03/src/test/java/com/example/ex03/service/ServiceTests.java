@@ -1,5 +1,6 @@
 package com.example.ex03.service;
 
+import com.example.ex03.domain.OrderDTO;
 import com.example.ex03.domain.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,11 @@ public class ServiceTests {
         orderService.order(orderVO);
 
         // 위와 같이 테스트하면 1번 상품의 ProductCount가 5 차감되는 것을 확인해야 한다
+    }
+
+    @Test
+    public void getListTest(){
+        orderService.getList().stream().map(OrderDTO::toString).forEach(log::info);
     }
 }
 
