@@ -1,5 +1,6 @@
 package com.example.ex03.dao;
 
+import com.example.ex03.domain.OrderVO;
 import com.example.ex03.domain.ProductVO;
 import com.example.ex03.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,10 @@ public class ProductDAO {
     // 상품 전체 목록
     public List<ProductVO> findAll(){ // 일반적으로 DAO에서는 findAll이라고 함
         return productMapper.selectAll();
+    }
+
+    // 상품 재고 수정
+    public void setProductStock(OrderVO orderVO){
+        productMapper.updateStock(orderVO);
     }
 }

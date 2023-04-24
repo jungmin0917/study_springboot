@@ -12,4 +12,11 @@
         SELECT PRODUCT_ID, PRODUCT_NAME, PRODUCT_STOCK, PRODUCT_PRICE, REGISTER_DATE, UPDATE_DATE
         FROM JUNGMIN_PRODUCT ORDER BY PRODUCT_ID DESC
     </select>
+
+<!-- 상품 주문 시, 상품 재고가 차감되어야 함 -->
+    <update id="updateStock">
+        UPDATE JUNGMIN_PRODUCT
+        SET PRODUCT_STOCK = PRODUCT_STOCK - #{productCount}
+        WHERE PRODUCT_ID = #{productId}
+    </update>
 </mapper>

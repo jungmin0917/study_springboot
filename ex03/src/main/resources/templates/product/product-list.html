@@ -8,6 +8,8 @@
     <table border="1">
 <!--    주의! 이름이 같아서 헷갈릴 수 있는데 테이블 th랑 타임리프 th랑 다르다!    -->
         <tr>
+            <th>단일 선택</th>
+            <th>주문 개수</th>
             <th>상품 번호</th>
             <th>상품 이름</th>
             <th>상품 재고</th>
@@ -18,6 +20,8 @@
 <!--    th:block은, iterable한 객체를 사용해 블록 처리를 하여 반복문을 돌리는 것이다    -->
         <th:block th:each="product: ${products}">
             <tr th:object="${product}">
+                <td><input type="radio" name="productId" th:value="*{productId}"></td>
+                <td><input type="text" name="productCount" readonly></td>
                 <td th:text="*{productId}"></td>
                 <td th:text="*{productName}"></td>
                 <td th:text="*{productStock}"></td>
@@ -28,4 +32,21 @@
         </th:block>
     </table>
 </body>
+
+<script>
+
+</script>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
