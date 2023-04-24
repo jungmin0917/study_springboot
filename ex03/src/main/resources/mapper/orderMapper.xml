@@ -13,6 +13,16 @@
     <select id="selectAll" resultType="orderDTO">
         SELECT P.PRODUCT_ID, PRODUCT_NAME, PRODUCT_STOCK, PRODUCT_PRICE, REGISTER_DATE, UPDATE_DATE, ORDER_ID, PRODUCT_COUNT, ORDER_DATE, PRODUCT_PRICE * PRODUCT_COUNT AS ORDER_PRICE
         FROM JUNGMIN_PRODUCT P JOIN JUNGMIN_ORDER O ON P.PRODUCT_ID = O.PRODUCT_ID
-        ORDER BY ORDER_ID DESC
+        ORDER BY
+        /* 아래 쿼리에서는 sort라는 필드를 따로 받을 것이다 */
+        <choose>
+            <when test="sort == 'recent'.toString()">
+                ORDER_ID
+            </when>
+            <otherwise>
+                ORDER_PRICE
+            </otherwise>
+        </choose>
+        DESC
     </select>
 </mapper>

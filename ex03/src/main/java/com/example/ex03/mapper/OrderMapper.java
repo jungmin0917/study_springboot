@@ -12,5 +12,5 @@ public interface OrderMapper {
     public void insert(OrderVO orderVO);
 
 //    주문 내역
-    public List<OrderDTO> selectAll();
+    public List<OrderDTO> selectAll(String sort);
 }

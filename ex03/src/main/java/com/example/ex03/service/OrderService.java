@@ -32,8 +32,8 @@ public class OrderService {
     }
 
 //    주문 내역
-    public List<OrderDTO> getList(){
-        return orderDAO.findAll();
+    public List<OrderDTO> getList(String sort){
+        return orderDAO.findAll(sort);
     }
 }
 

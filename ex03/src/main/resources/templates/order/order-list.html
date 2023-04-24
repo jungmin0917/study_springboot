@@ -14,11 +14,22 @@
         button{
             width: 100%;
         }
+        .sort span{
+            cursor: pointer;
+        }
+        .sort span.on{
+            font-weight: bold;
+        }
 
     </style>
 </head>
 <body>
     <div id="container">
+        <div class="sort">
+<!--        최신순이 기본값이라 on 클래스 넣어 둠 -->
+            <span th:class="${sort == 'recent' || sort == '' ? 'on' : ''}" data-sort="recent">최신순</span>
+            <span th:class="${sort == 'money' ? 'on' : ''}" data-sort="money">결제 금액순</span>
+        </div>
         <table border="1">
             <tr>
                 <th>주문 번호</th>
@@ -52,6 +63,12 @@ integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
 crossorigin="anonymous"></script>
 
 <script>
+    const $spans = $("div.sort span");
+
+    $spans.on("click", function(){
+        let sort = $(this).data("sort");
+        location.href = `/order/list?sort=${sort}`;
+    });
 
 </script>
 

@@ -21,7 +21,7 @@ public class OrderDAO {
     }
 
 //    주문 내역
-    public List<OrderDTO> findAll(){
-        return orderMapper.selectAll();
+    public List<OrderDTO> findAll(String sort){
+        return orderMapper.selectAll(sort);
     }
 }
