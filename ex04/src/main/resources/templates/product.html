@@ -24,13 +24,25 @@
 
         div.register-wrap{
             display: none;
+            width: 500px;
+            margin: 0 auto;
         }
+
+        div.register-wrap *{
+            width: 100%;
+            display: block;
+        }
+
+        button.register-ready{
+            width: 100%;
+        }
+
     </style>
 </head>
 <body>
 <div id="container">
     <button type="button" class="register-ready">상품 추가</button>
-    <div class="register-wrap" th:object="${productVO}">
+    <div class="register-wrap" th:object="${productForm}">
         <div>
             <input type="text" th:field="*{productName}" placeholder="상품 이름">
         </div>
@@ -95,7 +107,7 @@
     const $done = $("button#order-done"); // 주문 완료 버튼
     const $form = $("form#order-form");
     const $registerReady = $("button.register-ready");
-    const $registerDone = $("button.register-done");
+    const $registerDone = $("input.register-done");
 
     let $temp, i;
 
@@ -105,8 +117,27 @@
     });
 
     $registerDone.on("click", function(){
-        $(this).hide();
-        $registerReady.show();
+        // 어차피 등록 후 새로고침 할 거니까 show, hide 필요 없음
+
+        // ajax용 자바스크립트 객체 생성
+        let param = {
+            productName: $("input#productName").val(),
+            productStock: $("input#productStock").val(),
+            productPrice: $("input#productPrice").val()
+        };
+
+        $.ajax({
+            url: "/product/new",
+            method: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(param),
+            success: function(res){
+                location.reload();
+            },
+            error: function(err){
+                console.error(err);
+            }
+        });
     });
 
     $("body").on("click", ".productChoice", function(){
