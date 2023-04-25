@@ -23,14 +23,22 @@ public class BoardController {
         model.addAttribute("boards", boardService.getList());
     }
 
-
 //    게시글 1개 조회
-    @GetMapping("read")
+    @GetMapping(value = {"read", "modify"}) // modify도 똑같이 boardId 가지고 modify 페이지로 가기 때문에, 같이 잡아준다.
     public void getBoard(Long boardId, Model model){
         model.addAttribute("board", boardService.getBoard(boardId));
     }
 
-//    게시글 추가 (완료버튼 눌렀을 때)
+
+//    게시글 작성 페이지로 이동
+    @GetMapping("write")
+    public void write(Model model){ // 아래와 메소드명은 같으나 반환값, 매개변수가 다르므로 오버로딩되었다.
+        model.addAttribute(new BoardVO()); // 타임리프 th:field로 필드 채우기용
+
+    }
+
+
+//    게시글 작성 처리
 //    forward 방식은 처음 요청한 경로가 마지막까지 남아있고,
 //    redirect 방식은 마지막에 요청한 경로가 남아있다.
     @PostMapping("write")
@@ -60,7 +68,36 @@ public class BoardController {
     }
 
 //    게시글 삭제
+    @GetMapping("remove")
+    public RedirectView remove(Long boardId){
+        boardService.remove(boardId);
 
-//    게시글 수정
+        // 게시글 삭제 후 목록으로 이동해야 하기에 이것도 리다이렉트로 가야 한다
+        return new RedirectView("/board/list");
+    }
+
+//    게시글 수정 처리
+    @PostMapping("modify")
+    public RedirectView modify(BoardVO boardVO, RedirectAttributes redirectAttributes){
+        boardService.modify(boardVO);
+
+        // 아래와 같이 작성하면 페이지 리다이렉트 시 쿼리스트링이 자동으로 붙음
+        redirectAttributes.addAttribute("boardId", boardVO.getBoardId());
+
+        // 수정 완료 후 해당 게시글 상세보기로 가야 함
+        return new RedirectView("/board/read");
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

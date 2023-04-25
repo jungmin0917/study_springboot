@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -43,11 +44,12 @@ public class BoardControllerTests {
                 .toString(); // getModelMap과 toString은 우리가 반환된 객체를 문자열로 보고 싶어서 변환함
 
         log.info(result);
-    }
+}
 
     @Test
     public void getBoardTest() throws Exception{
-        String result = mockMvc.perform(MockMvcRequestBuilders.get("/board/read").param("boardId", "3"))
+//        String result = mockMvc.perform(MockMvcRequestBuilders.get("/board/read").param("boardId", "3"))
+        String result = mockMvc.perform(MockMvcRequestBuilders.get("/board/modify").param("boardId", "10"))
                 .andReturn()
                 .getModelAndView()
                 .getModelMap()
@@ -68,6 +70,29 @@ public class BoardControllerTests {
 
         log.info(result);
     }
+
+    @Test
+    public void removeTest() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/board/remove").param("boardId", "11"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+        // andExpect(): 요청에 대한 검증을 하는 메소드
+        // 위처럼 작성하면 해당 요청에 대한 응답이 리다이렉트인지 확인하는 것이다
+    }
+
+    @Test
+    public void modifyTest() throws Exception{
+        String result = mockMvc.perform(MockMvcRequestBuilders.post("/board/modify")
+                .param("boardId", "10")
+                .param("boardTitle", "수정된 제목")
+                .param("boardContent", "수정된 내용"))
+                .andReturn()
+                .getModelAndView()
+                .getModelMap()
+                .toString();
+
+        log.info(result);
+    }
+
 }
 
 
