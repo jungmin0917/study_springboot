@@ -8,4 +8,31 @@
         FROM JUNGMIN_BOARD
         WHERE BOARD_ID = #{boardId}
     </select>
+
+    <select id="selectAll" resultType="boardVO">
+        SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE
+        FROM JUNGMIN_BOARD
+        ORDER BY BOARD_ID DESC
+    </select>
+
+    <insert id="insert">
+        <selectKey keyProperty="boardId" order="BEFORE" resultType="Long">
+            SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO JUNGMIN_BOARD
+        (BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT)
+        VALUES(#{boardId}, #{boardTitle}, #{boardWriter}, #{boardContent})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM JUNGMIN_BOARD
+        WHERE BOARD_ID = #{boardId}
+    </delete>
+
+    <update id="update">
+        UPDATE JUNGMIN_BOARD
+        SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_UPDATE_DATE = SYSDATE
+        WHERE BOARD_ID = #{boardId}
+    </update>
 </mapper>
