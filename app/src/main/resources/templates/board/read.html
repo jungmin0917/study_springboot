@@ -41,7 +41,7 @@
             <!-- Table -->
             <h3><a class="list button small" th:href="@{/board/list}">목록 보기</a></h3>
             <div class="content">
-                <div class="form" th:object="${board}">
+                <div class="form" th:object="${boardVO}">
                     <form th:action="@{/board/remove(boardId=*{boardId})}" method="get">
                         <div class="fields">
                             <div class="field">
@@ -72,7 +72,7 @@
 <!--                    수정, 삭제 버튼    -->
                         <ul class="actions special">
                             <li>
-                                <input type="button" class="button" value="수정" onclick=""/>
+                                <input type="button" class="button" value="수정" onclick="modify()"/>
                                 <input type="submit" class="button" value="삭제"/>
                             </li>
                         </ul>
@@ -118,4 +118,14 @@
 <script src="/js/breakpoints.min.js"></script>
 <script src="/js/util.js"></script>
 <script src="/js/main.js"></script>
+
+<!-- 스크립트 안에서 타임리프 문법 사용하기 -->
+<script th:inline="javascript">
+    let boardId = [[${boardVO.boardId}]];
+
+    function modify(){
+        location.href = "/board/modify?boardId=" + boardId;
+    }
+</script>
+
 </html>

@@ -10,9 +10,18 @@
     </select>
 
     <select id="selectAll" resultType="boardVO">
-        SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE
-        FROM JUNGMIN_BOARD
-        ORDER BY BOARD_ID DESC
+        SELECT * FROM
+        (
+            SELECT ROWNUM R, BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE
+            FROM
+            (
+                SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE
+                FROM JUNGMIN_BOARD
+                ORDER BY BOARD_ID DESC
+            ) B
+            <![CDATA[WHERE ROWNUM <= #{page} * #{amount}]]>
+        )
+        <![CDATA[WHERE R > (#{page} - 1) * #{amount}]]>
     </select>
 
     <insert id="insert">

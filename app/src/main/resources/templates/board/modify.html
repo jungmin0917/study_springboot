@@ -40,36 +40,37 @@
                 <p>게시글 수정</p>
             </header>
             <!-- Table -->
-            <h3><a class="list button small">목록 보기</a></h3>
+            <h3><a class="list button small" th:hreft="@{/board/list}">목록 보기</a></h3>
             <div class="content">
-                <div class="form">
-                    <form method="post" id="updateForm" enctype="multipart/form-data">
+                <div class="form" th:object="${boardVO}">
+<!--                    <form th:action="@{/board/modify}" method="post" id="updateForm" enctype="multipart/form-data">-->
+                    <form th:action="@{/board/modify}" method="post" id="updateForm">
                         <div class="fields">
                             <div class="field">
                                 <h4>번호</h4>
-                                <input type="text" readonly/>
+                                <input type="text" th:field="*{boardId}" readonly />
                             </div>
                             <div class="field">
                                 <h4>*제목</h4>
-                                <input type="text"/>
+                                <input type="text" th:field="*{boardTitle}" />
                             </div>
                             <div class="field">
                                 <h4>*내용</h4>
-                                <textarea rows="6" style="resize:none"></textarea>
+                                <textarea rows="6" style="resize:none" th:field="*{boardContent}" ></textarea>
                             </div>
                             <div class="field">
                                 <h4>작성자</h4>
-                                <input type="text" readonly/>
+                                <input type="text" th:field="*{boardWriter}" readonly/>
                             </div>
-                            <div class="field">
-                                <h4>첨부파일</h4>
-                                <input type="file" name="upload" multiple>
-                            </div>
-                            <div class="field">
-                                <div class="uploadResult">
-                                    <ul></ul>
-                                </div>
-                            </div>
+<!--                            <div class="field">-->
+<!--                                <h4>첨부파일</h4>-->
+<!--                                <input type="file" name="upload" multiple>-->
+<!--                            </div>-->
+<!--                            <div class="field">-->
+<!--                                <div class="uploadResult">-->
+<!--                                    <ul></ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                         <ul class="actions special">
                             <li>

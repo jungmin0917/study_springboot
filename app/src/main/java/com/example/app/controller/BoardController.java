@@ -26,9 +26,8 @@ public class BoardController {
 //    게시글 1개 조회
     @GetMapping(value = {"read", "modify"}) // modify도 똑같이 boardId 가지고 modify 페이지로 가기 때문에, 같이 잡아준다.
     public void getBoard(Long boardId, Model model){
-        model.addAttribute("board", boardService.getBoard(boardId));
+        model.addAttribute(boardService.getBoard(boardId));
     }
-
 
 //    게시글 작성 페이지로 이동
     @GetMapping("write")
