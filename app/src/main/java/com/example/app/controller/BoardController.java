@@ -34,9 +34,7 @@ public class BoardController {
     @GetMapping("write")
     public void write(Model model){ // 아래와 메소드명은 같으나 반환값, 매개변수가 다르므로 오버로딩되었다.
         model.addAttribute(new BoardVO()); // 타임리프 th:field로 필드 채우기용
-
     }
-
 
 //    게시글 작성 처리
 //    forward 방식은 처음 요청한 경로가 마지막까지 남아있고,

@@ -34,7 +34,7 @@
                 <p>게시판 목록</p>
             </header>
             <!-- Table -->
-            <h3><a class="write button small">글 등록</a></h3>
+            <h3><a class="write button small" th:href="@{/board/write}">글 등록</a></h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -48,6 +48,19 @@
                     </thead>
                     <tbody>
 <!--                이쪽에 글 목록을 불러올 것이다 -->
+<!--                    th:each 안쪽에 자바의 빠른 for문처럼 사용하면 된다    -->
+                        <th:block th:each="board : ${boards}">
+<!--                        board.~~~ 에서 board를 생략하기 위해 th:object 태그를 사용함    -->
+                            <tr th:object="${board}">
+                                <td class="bno" th:text="*{boardId}"></td>
+                                <td class="title">
+                                    <a th:href="@{/board/read(boardId=*{boardId})}" th:text="*{boardTitle}"></a>
+                                </td>
+                                <td class="writer" th:text="*{boardWriter}"></td>
+                                <td class="regDate" th:text="*{boardRegisterDate}"></td>
+                                <td class="updateDate" th:text="*{boardUpdateDate}"></td>
+                            </tr>
+                        </th:block>
                     </tbody>
                 </table>
 
