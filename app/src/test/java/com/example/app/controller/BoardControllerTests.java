@@ -55,6 +55,19 @@ public class BoardControllerTests {
 
         log.info(result);
     }
+
+    @Test
+    public void writeTest() throws Exception{
+        String result = mockMvc.perform(MockMvcRequestBuilders.post("/board/write")
+                .param("boardTitle", "테스트 제목5")
+                .param("boardWriter", "테스트 작성자5")
+                .param("boardContent", "테스트 내용5"))
+                .andReturn()
+                .getFlashMap() // addFlashAttribute로 넘어온 값을 가져옴
+                .toString();
+
+        log.info(result);
+    }
 }
 
 
