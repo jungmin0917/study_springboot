@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 계속 xml 쪽에 ; 넣는데 절대로 넣지 마라!! -->
+<mapper namespace="com.example.app.mapper.BoardMapper">
+    <select id="select" resultType="boardVO">
+        SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE
+        FROM JUNGMIN_BOARD
+        WHERE BOARD_ID = #{boardId}
+    </select>
+</mapper>
