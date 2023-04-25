@@ -18,6 +18,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    // 주문 리스트 보기
     @GetMapping("list/{sort}")
     public List<OrderDTO> list(@PathVariable("sort") String sort){
         log.info("/order/list....................." + sort);
@@ -29,6 +30,7 @@ public class OrderController {
         return orderService.getList(sort);
     }
 
+    // 주문 등록
     @PostMapping("new")
     public void register(@RequestBody OrderVO orderVO){
         orderService.order(orderVO);
