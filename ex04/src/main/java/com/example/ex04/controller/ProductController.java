@@ -33,6 +33,12 @@ public class ProductController {
         productService.register(productVO); // 상품 등록
     }
 
+    // 상품 1개의 정보 가져옴 (주로 재고 업데이트용)
+    @ResponseBody
+    @GetMapping("{productId}") // 변수로 매핑함
+    public ProductVO getProduct(@PathVariable("productId") Long productId){
+        return productService.getProduct(productId);
+    }
 }
 
 

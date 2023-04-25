@@ -23,4 +23,7 @@ public interface ProductService {
     public List<ProductVO> getList();
 
     // 상품 재고 업데이트 쪽은 여기가 아니고 OrderService 쪽에 넣어놓는다.
+
+    // 상품 1개 조회
+    public ProductVO getProduct(Long productId);
 }

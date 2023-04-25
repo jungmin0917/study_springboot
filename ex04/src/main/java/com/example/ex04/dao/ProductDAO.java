@@ -30,4 +30,9 @@ public class ProductDAO {
     public void setProductStock(OrderVO orderVO){
         productMapper.updateStock(orderVO);
     }
+
+    // 상품 1개 조회
+    public ProductVO findById(Long productId){
+        return productMapper.select(productId);
+    }
 }

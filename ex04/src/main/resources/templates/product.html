@@ -258,6 +258,7 @@
         $temp = $inputs.eq(i); // 현재 선택한 것을 temp에 담음
     });
 
+    // 주문 완료
     $orderDone.on("click", function(){
 
         let productId = $("input[name='productId']:checked").val();
@@ -287,11 +288,24 @@
         console.log(sort);
 
         $.ajax({
-            url: "/order/new",
+            url: "/order/write",
             method: "POST",
             contentType: "application/json; charset=utf-8", // 보내는 데이터가 JSON임을 명시
             data: JSON.stringify(param), // 자바스크립트 객체를 JSON 형태로 변환하여 보내야 함
             success: function(res){
+                // 주문 완료 시 기존 상품의 재고도 업데이트
+                // ajax 성공 시 또 ajax하는 방식으로 하겠음
+                $.ajax({
+                    url: "/product/" + productId,
+                    method: "GET",
+                    success: function(res){
+                        $(productCountSelector).closest("tr").find("td:nth-of-type(5)").html(res.productStock);
+                    },
+                    error: function(err){
+                        console.error(err);
+                    }
+                });
+
                 // 성공하면 주문 목록 다시 로드하면 됨
                 showOrderList(sort);
             },
@@ -300,8 +314,6 @@
             }
         });
     });
-
-
 
 </script>
 

@@ -31,10 +31,11 @@ public class OrderController {
     }
 
     // 주문 등록
-    @PostMapping("new")
+    @PostMapping("write")
     public void register(@RequestBody OrderVO orderVO){
         orderService.order(orderVO);
     }
+
 }
 
 
