@@ -3,6 +3,7 @@ package com.shop.repository;
 import com.shop.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 // JpaRepository 객체에는 기초 CRUD 및 페이징 처리에 대한 메소드가 정의되어 있다.
 
 // DAO의 역할로 사용할 Repository 선언함
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item> {
 
     // 상품명으로 데이터를 조회 (반환값이 여러 개 있을 수 있으므로 List를 사용함)
     List<Item> findByItemNm(String itemNm);
