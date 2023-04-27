@@ -34,4 +34,17 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     // 여기서 i는 Item 엔티티의 별칭(alias)로 사용되고 있다.
     // JPQL에서는 엔티티와 연관된 데이터를 조회할 때, 엔티티에 대한 별칭을 사용할 수도 있다. (안 사용해도 됨)
     // 위와 같이 @Query가 달린 메소드는 그냥 바로 쿼리메소드 식으로 해석해서 실행하는 것이 아니고, 개발자가 @Query 내부에 적은 JPQL대로 실행한다.
+
+//    교수님이 적어주신 메소드. 대체적으로 이런 과정을 따라서 개발하는 듯하다.
+//    default List<Item> getItems(Long id, String item) {
+//        QItem item1 = QItem.item;
+//
+//        BooleanBuilder builder = new BooleanBuilder();
+//        builder.and(item.id.eq(id))
+//                .and(item.price.loe(10000));
+//        List<Item> items = (List<Item>)findAll(builder);
+//
+//        Item it = findOne(item.id.eq(id)).orElse(null);
+//    }
+
 }
