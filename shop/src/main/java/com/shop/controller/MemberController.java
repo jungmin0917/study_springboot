@@ -49,7 +49,21 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @GetMapping(value = "/login")
+    public String loginMember(){
+        return "/member/memberLoginForm";
+    }
+
+    // 로그인 처리에 대한 PostMapping은 할 필요 없다 (스프링 시큐리티에서 요청을 중간에 가져가서 처리해줌)
+    // failureUrl 메소드로 로그인 실패 시 이동할 URL을 지정해줬었다. 그 URL의 GetMapping을 해준다.
+    @GetMapping(value = "/login/error")
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "/member/memberLoginForm";
+    }
 }
+
 
 
 

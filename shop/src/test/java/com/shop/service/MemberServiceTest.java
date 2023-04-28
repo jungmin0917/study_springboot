@@ -26,7 +26,7 @@ public class MemberServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder; // 여기서 주입받아서 생성된 객체를 createMember 메소드에 써먹음
 
-    public Member createMember(){ // 회원가입용 전달 객체인 DTO 만드는 메소드
+    public Member createMember(){ // 회원가입용 전달 객체인 DTO 만들고 그걸로 엔티티 만드는 메소드
         MemberFormDTO memberFormDTO = new MemberFormDTO();
         memberFormDTO.setName("홍길동");
         memberFormDTO.setEmail("test@email.com");
