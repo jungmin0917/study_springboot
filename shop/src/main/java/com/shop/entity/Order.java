@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
-public class Order {
+public class Order extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -33,7 +33,8 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // 해당 관계의 주인이 아니며, 상대 엔티티의 order 필드에 의해 관리된다는 뜻 (상대 엔티티의 order라는 필드가 FK로 작동하고 있다는 의미임)
     private List<OrderItem> orderItems = new ArrayList<>(); // 하나의 주문이 여러 개의 주문 상품을 가지므로 List 자료형을 사용해서 매핑을 한다.
 
-    private LocalDateTime regTime;
-    private LocalDateTime updateTime;
+//    공통으로 상속받았음
+//    private LocalDateTime regTime;
+//    private LocalDateTime updateTime;
 
 }

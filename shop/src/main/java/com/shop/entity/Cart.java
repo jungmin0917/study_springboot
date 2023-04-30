@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "cart")
 @Data
-public class Cart {
+public class Cart extends BaseEntity{
 
     @Id // 현재 컬럼을 PK로 지정
     @Column(name = "cart_id") // 매핑할 컬럼 지정

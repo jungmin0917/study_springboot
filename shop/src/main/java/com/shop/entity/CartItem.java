@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="cart_item")
 @Data
-public class CartItem {
+public class CartItem extends BaseEntity{
 
     @Id
     @GeneratedValue // strategy 속성 생략 시 기본값으로 AUTO가 설정됨

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="item") // 엔티티와 매핑할 DB 테이블을 지정함. 이렇게 하면 DB에 있는 item이라는 테이블과 매핑할 것임
 @Data
-public class Item {
+public class Item extends BaseEntity{
 
     // Entity 클래스는 반드시 기본키를 가져야 하므로 상품 ID를 기본키로 설정함
     @Id // 상품 ID를 기본값으로 쓸 것임을 명시함
@@ -35,6 +35,8 @@ public class Item {
     private ItemSellStatus itemSellStatus; // 판매 상태 (enum 클래스)
 
     // 아래 두 개는 @Column 어노테이션 생략 (알아서 매핑됨)
-    private LocalDateTime regTime; // 상품 등록 시간
-    private LocalDateTime updateTime; // 상품 수정 시간
+    
+//    공통으로 상속받았음
+//    private LocalDateTime regTime; // 상품 등록 시간
+//    private LocalDateTime updateTime; // 상품 수정 시간
 }
