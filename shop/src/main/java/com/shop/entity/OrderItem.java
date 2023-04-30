@@ -23,8 +23,8 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private int orderPrice; // 주문 가격
-    private int count; // 수량
+    private Integer orderPrice; // 주문 가격
+    private Integer count; // 수량
 
 //    공통으로 상속받았음
 //    private LocalDateTime regTime;

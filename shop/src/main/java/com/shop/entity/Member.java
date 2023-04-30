@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Member extends BaseEntity{
 
     @Id
-    @Column(name="member_id")
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.AUTO) // 기본키 생성 전략
     private Long id; // PK 지정
 
@@ -40,7 +40,7 @@ public class Member extends BaseEntity{
         String password = passwordEncoder.encode(memberFormDTO.getPassword());
         member.setPassword(password);
         member.setAddress(memberFormDTO.getAddress());
-        member.setRole(Role.USER); // 일반 회원의 권한을 준다
+        member.setRole(Role.ADMIN); // 일반 회원의 권한을 준다
 
         return member;
     }

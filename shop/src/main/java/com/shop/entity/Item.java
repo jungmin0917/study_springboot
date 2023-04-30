@@ -14,7 +14,7 @@ public class Item extends BaseEntity{
 
     // Entity 클래스는 반드시 기본키를 가져야 하므로 상품 ID를 기본키로 설정함
     @Id // 상품 ID를 기본값으로 쓸 것임을 명시함
-    @Column(name="item_id") // 해당 테이블의 item_id 컬럼과 매핑할 것임을 명시함
+    @Column(name = "item_id") // 해당 테이블의 item_id 컬럼과 매핑할 것임을 명시함
     @GeneratedValue(strategy = GenerationType.AUTO) // 기본키 생성 전략을 JPA에게 위임함
     private Long id; // 상품 ID
 
@@ -22,10 +22,10 @@ public class Item extends BaseEntity{
     private String itemNm; // 상품 이름
 
     @Column(name="price", nullable = false)
-    private int price; // 상품 가격
+    private Integer price; // 상품 가격
 
     @Column(nullable = false) // nullable : 생략 가능 여부
-    private int stockNumber; // 상품 재고
+    private Integer stockNumber; // 상품 재고
 
     @Lob // 사이즈가 큰 데이터라면 @Lob 어노테이션을 붙여준다
     @Column(nullable = false)

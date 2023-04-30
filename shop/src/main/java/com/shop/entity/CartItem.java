@@ -22,7 +22,7 @@ public class CartItem extends BaseEntity{
     @JoinColumn(name = "item_id")
     private Item item; // JPA 완전 초기에 만들었던 Item 엔티티 선언
 
-    private int count; // 같은 상품을 장바구니에 몇 개 담았는지
+    private Integer count; // 같은 상품을 장바구니에 몇 개 담았는지
 
     
 }
