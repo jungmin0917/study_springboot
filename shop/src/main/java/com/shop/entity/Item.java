@@ -1,6 +1,7 @@
 package com.shop.entity;
 
 import com.shop.constant.ItemSellStatus;
+import com.shop.dto.ItemFormDTO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,4 +40,22 @@ public class Item extends BaseEntity{
 //    공통으로 상속받았음
 //    private LocalDateTime regTime; // 상품 등록 시간
 //    private LocalDateTime updateTime; // 상품 수정 시간
+
+    public void updateItem(ItemFormDTO itemFormDTO){
+        this.itemNm = itemFormDTO.getItemNm();
+        this.price = itemFormDTO.getPrice();
+        this.stockNumber = itemFormDTO.getStockNumber();
+        this.itemDetail = itemFormDTO.getItemDetail();
+        this.itemSellStatus = itemFormDTO.getItemSellStatus();
+    }
 }
+
+
+
+
+
+
+
+
+
+
