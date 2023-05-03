@@ -34,6 +34,7 @@ public class ItemFormDTO {
 
     private List<Long> itemImgIds = new ArrayList<>(); // 상품의 이미지 아이디를 저장하는 리스트. 상품 등록 시에는 아직 상품의 이미지를 저장하지 않았기에 아무 값도 들어가 있지 않고 수정 시에 이미지 아이디를 담아 둘 용도로 사용한다.
 
+    // ModelMapper 객체를 이용하여 엔티티 <-> DTO 간 변환 메소드
     private static ModelMapper modelMapper = new ModelMapper(); // 엔티티 - DTO간 변환 객체
 
     public Item createItem(){ // ItemFormDTO를 엔티티 객체로 반환해주는 메소드

@@ -6,8 +6,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.constant.ItemSellStatus;
 import com.shop.dto.ItemSearchDTO;
+import com.shop.dto.MainItemDTO;
+import com.shop.dto.QMainItemDTO;
 import com.shop.entity.Item;
 import com.shop.entity.QItem;
+import com.shop.entity.QItemImg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +53,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{ // ItemRe
         return QItem.item.regTime.after(dateTime);
     }
 
-    // 검색어로 검색할 때 조건
+    // 검색어로 검색할 때 조건 (상품명, 상품 등록자 아이디로)
     private BooleanExpression searchByLike(String searchBy, String searchQuery){
         if(StringUtils.equals("itemNm", searchBy)){ // 검색 종류가 상품명인 경우
             return QItem.item.itemNm.like("%" + searchQuery + "%");
@@ -61,8 +64,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{ // ItemRe
         return null; // 그 외 다른 경우
     }
 
+    // 검색어로 검색할 때 조건 (상품명으로)
+    private BooleanExpression itemNmLike(String searchQuery){
+        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
+    }
+
     @Override
-    // 페이지에 대한 데이터를 담고 있는 Page<Item> 객체를 반환하는 메소드 구현
+    // 상품 관리 리스트를 조회하여 Page 객체(JPA에서 제공하는)로 반환하는 메소드. 이 Page 객체는 페이지 정보 및 페이징된 결과 데이터 등을 담고 있다.
     public Page<Item> getAdminItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable) {
 
         // JPAQueryFactory 객체를 이용해서 쿼리를 생성함.
@@ -81,5 +89,35 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{ // ItemRe
         Long total = results.getTotal(); // 조회한 전체 데이터를 전체 개수 total 변수에 담는다
 
         return new PageImpl<>(content, pageable, total); // 조회한 데이터를 Page 클래스의 구현체인 PageImpl 객체로 반환한다.
+    }
+
+    // 메인 페이지에 보여줄 리스트 조회하는 메소드
+    @Override
+    public Page<MainItemDTO> getMainItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        QueryResults<MainItemDTO> results = queryFactory
+                .select(
+                        new QMainItemDTO(
+                                item.id,
+                                item.itemNm,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price
+                        )
+                )
+                .from(itemImg) // itemImg에서 조회하는데
+                .join(itemImg.item, item) // ItemImg 테이블이랑 Item 테이블이랑 내부 조인함
+                .where(itemImg.repImgYn.eq("Y")) // itemImg의 repImgYn 값이 Y인 것만 (대표 이미지만)
+                .where(itemNmLike(itemSearchDTO.getSearchQuery())) // 그 중 검색어가 있으면 검색어도 조건에 추가
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults(); // QueryResults 객체로 반환
+
+        List<MainItemDTO> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
     }
 }

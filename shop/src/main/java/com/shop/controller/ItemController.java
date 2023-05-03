@@ -107,6 +107,15 @@ public class ItemController {
 
         return "item/itemMng";
     }
+
+    @GetMapping(value = "/item/{itemId}")
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
+        ItemFormDTO itemFormDTO = itemService.getItemDtl(itemId); // 상품 이미지를 포함한 상품 데이터를 itemFormDTO로 반환받는다.
+
+        model.addAttribute("item", itemFormDTO);
+
+        return "item/itemDtl";
+    }
 }
 
 

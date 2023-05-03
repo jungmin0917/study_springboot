@@ -3,11 +3,13 @@ package com.shop.service;
 import com.shop.dto.ItemFormDTO;
 import com.shop.dto.ItemImgDTO;
 import com.shop.dto.ItemSearchDTO;
+import com.shop.dto.MainItemDTO;
 import com.shop.entity.Item;
 import com.shop.entity.ItemImg;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional // 기본값이 변경 감지임
 @RequiredArgsConstructor
+@Slf4j
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -34,6 +37,7 @@ public class ItemService {
         Item item = itemFormDTO.createItem(); // item Form DTO를 item 엔티티 객체로 변환
         itemRepository.save(item); // item을 컨텍스트에 저장
 
+        log.info("itemImgFileList의 사이즈 : " + itemImgFileList.size());
         // 이미지 등록
         for (int i = 0; i < itemImgFileList.size(); i++) {
             ItemImg itemImg = new ItemImg();
@@ -91,6 +95,11 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable){
         return itemRepository.getAdminItemPage(itemSearchDTO, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDTO> getMainItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchDTO, pageable);
     }
 }
 
