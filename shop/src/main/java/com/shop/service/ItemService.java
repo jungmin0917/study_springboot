@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 public class ItemService {
 
-    private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository; // 자동 주입에 의해 Impl 클래스를 골라서 객체가 생성됨 (인터페이스를 자동주입할 시 해당 인터페이스가 구현한 클래스 중 하나를 자동으로 주입하는데, 현재는 해당 인터페이스를 구현한 클래스가 하나밖에 없어서 그 ItemRepositoryCustomImpl 클래스를 객체로 생성하여 주입한다)
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
 
