@@ -37,4 +37,33 @@ public class Order extends BaseEntity{
 //    private LocalDateTime regTime;
 //    private LocalDateTime updateTime;
 
+    // 주문 상품 엔티티를 매개변수로 받아 orderItems 리스트에 추가함
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+        orderItem.setOrder(this); // orderItem 엔티티 쪽에서도 다대일 매핑으로 Order 엔티티를 갖고있기에 해당 엔티티에 현재 주문 엔티티를 설정한다. (즉, 양방향 참조 관계라는 뜻)
+    }
+
+    // 매개변수로 Member 엔티티와 OrderItem 엔티티를 갖고 있는 리스트를 받아 Order 엔티티 반환하는 메소드
+    public static Order createOrder(Member member, List<OrderItem> orderItemList){
+        Order order = new Order(); // Order 엔티티를 반환하기 위해 Order 엔티티 객체 생성
+        order.setMember(member);
+        // 생성한 Order 엔티티 객체에 주문 상품을 전부 추가
+        for(OrderItem orderItem : orderItemList){
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER); // 주문 상태 설정. ORDER랑 CANCEL이 있음
+        order.setOrderDate(LocalDateTime.now()); // 주문 시간 현재로 설정.
+        return order; // 생성한 Order 엔티티 반환
+    }
+
+    // 총 주문 금액을 구하는 메소드
+    public int getTotalPrice(){
+        int totalPrice = 0;
+        for(OrderItem orderItem : this.orderItems){ // 현재 주문에 담긴 주문 상품 엔티티를 순회하면서 참조
+            totalPrice += orderItem.getTotalPrice(); // 상품 가격 * 주문 개수를 구하는 getTotalPrice를 주문 총 금액에 더한다.
+        }
+
+        return totalPrice;
+    }
+
 }

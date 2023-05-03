@@ -2,6 +2,7 @@ package com.shop.entity;
 
 import com.shop.constant.ItemSellStatus;
 import com.shop.dto.ItemFormDTO;
+import com.shop.exception.OutOfStockException;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -41,12 +42,24 @@ public class Item extends BaseEntity{
 //    private LocalDateTime regTime; // 상품 등록 시간
 //    private LocalDateTime updateTime; // 상품 수정 시간
 
+    // 상품을 수정하는 메소드 (엔티티 상태를 변경하면 자동으로 엔티티 컨텍스트 영역의 내용이 바뀌고 DB에 반영됨)
     public void updateItem(ItemFormDTO itemFormDTO){
         this.itemNm = itemFormDTO.getItemNm();
         this.price = itemFormDTO.getPrice();
         this.stockNumber = itemFormDTO.getStockNumber();
         this.itemDetail = itemFormDTO.getItemDetail();
         this.itemSellStatus = itemFormDTO.getItemSellStatus();
+    }
+
+    // 상품 재고를 감소시키는 메소드
+    public void removeStock(int stockNumber){
+        int restStock = this.stockNumber - stockNumber; // 현재 재고에서 감소시킬 재고량을 뺀다.
+
+        if(restStock < 0){
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량: " + this.stockNumber +  ")");
+        }
+
+        this.stockNumber = restStock; // 성공적으로 재고가 감소되면 엔티티를 변화시킴.
     }
 }
 
