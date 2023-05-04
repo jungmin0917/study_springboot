@@ -8,4 +8,7 @@ import java.util.List;
 public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
     
     List<ItemImg> findByItemIdOrderByIdAsc(Long itemId); // 아이템 id를 받아 그걸로 상품 이미지를 조회하는데 상품 이미지 아이디가 오름차순으로 되게끔 조회함
+
+    // 상품 ID와 대표 이미지 여부로 상품 이미지 엔티티 조회
+    ItemImg findByItemIdAndRepImgYn(Long itemId, String repImgYn);
 }

@@ -21,5 +21,4 @@ public class OrderItemDTO {
         this.imgUrl = imgUrl;
     }
 
-
 }
