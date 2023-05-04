@@ -34,9 +34,14 @@ public class CartItem extends BaseEntity{
         return cartItem;
     }
 
-    // 장바구니에 담을 상품 수량을 증가시켜 줄 메소드
+    // 장바구니에 담은 상품 수량을 증가시켜 줄 메소드
     public void addCount(int count){
         this.count += count;
+    }
+
+    // 장바구니에 담은 상품 수량을 변경해 줄 메소드
+    public void updateCount(int count){
+        this.count = count;
     }
 
 }

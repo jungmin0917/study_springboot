@@ -1,16 +1,16 @@
 package com.shop.controller;
 
+import com.shop.dto.CartDetailDTO;
 import com.shop.dto.CartItemDTO;
 import com.shop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -54,6 +54,46 @@ public class CartController {
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
 
+    // 장바구니 페이지
+    @GetMapping(value = "/cart")
+    public String orderHist(Principal principal, Model model){
+        List<CartDetailDTO> cartDetailList = cartService.getCartList(principal.getName());
+
+        model.addAttribute("cartItems", cartDetailList);
+
+        return "cart/cartList";
+    }
+
+    // 장바구니 상품의 수량을 업데이트하는 메소드
+    // HTTP 메소드에서 요청된 자원의 일부를 업데이트할 때 PATCH 방식을 사용한다. 장바구니 상품의 수량만 업데이트하면 되기 때문에 @PatchMapping을 사용한다.
+    @PatchMapping(value = "/cartItem/{cartItemId}")
+    @ResponseBody
+    public ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, Principal principal){
+
+        if(count <= 0){ // 요청한 개수가 0개 이하일 때
+            return new ResponseEntity<String>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
+        }else if(!cartService.validateCartItem(cartItemId, principal.getName())){ // 요청자와 상품 주인이 일치하지 않을 때
+            return new ResponseEntity<String>("수정 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+
+        cartService.updateCartItemCount(cartItemId, count);
+        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    // 장바구니 상품을 장바구니에서 삭제하는 메소드
+    // HTTP 메소드에서 요청된 자원을 삭제할 때는 DELETE 방식을 사용한다. 장바구니 상품을 삭제하기 때문에 @DeleteMapping을 사용한다.
+    @DeleteMapping(value = "/cartItem/{cartItemId}")
+    @ResponseBody
+    public ResponseEntity deleteCartItem(@PathVariable("cartItemId") Long cartItemId, Principal principal){
+
+        // 당연히 여기서도 해당 요청을 한 사용자와 장바구니 상품 주인이 같은지 확인한다.
+        if(!cartService.validateCartItem(cartItemId, principal.getName())){
+            return new ResponseEntity<String>("수정 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+
+        cartService.deleteCartItem(cartItemId); // 해당 장바구니 상품을 삭제함
+        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
 }
 
 
