@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -80,6 +81,30 @@ public class OrderService {
 
         // 페이지 구현 객체를 생성하여 반환함
         return new PageImpl<OrderHistDTO>(orderHistDTOs, pageable, totalCount);
+    }
+
+    @Transactional(readOnly = true)
+    // 자바스크립트는 조작이 가능하므로 주문 취소에 앞서 서버단에서 주문 번호와 사용자 이메일을 이용해 해당 사용자의 주문이 맞는지 검증한다
+    public boolean validateOrder(Long orderId, String email){
+        Member curMember = memberRepository.findByEmail(email); // 이메일로 실제 사용자를 DB에서 조회
+        Order order = orderRepository.findById(orderId) // 주문 번호로 실제 주문을 DB에서 조회
+                .orElseThrow(EntityNotFoundException::new);
+        Member savedMember = order.getMember(); // 조회한 주문의 Member 엔티티를 조회
+
+        // 주문한 회원과 현재 로그인한 회원의 이메일이 일치하는지 검증
+        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
+            return false; // 같지 않으면 false 리턴
+        }
+        
+        return true; // 같으면 true 리턴
+    }
+
+    // 주문 취소 메소드
+    public void cancelOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        order.cancelOrder();
     }
 }
 

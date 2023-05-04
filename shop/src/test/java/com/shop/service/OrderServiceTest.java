@@ -1,6 +1,7 @@
 package com.shop.service;
 
 import com.shop.constant.ItemSellStatus;
+import com.shop.constant.OrderStatus;
 import com.shop.dto.OrderDTO;
 import com.shop.entity.Item;
 import com.shop.entity.Member;
@@ -83,4 +84,36 @@ public class OrderServiceTest {
         assertEquals(totalPrice, order.getTotalPrice()); // 계산한 주문 상품의 총 가격과 DB에 저장된 주문 상품이 가격이 같은지 확인하여 주문 로직이 잘 실행됐는지 확인한다.
     }
 
+    @Test
+    @DisplayName("주문 취소 테스트")
+    public void cancelOrder(){
+        Item item = this.saveItem(); // 테스트 상품 생성
+        Member member = this.saveMember(); // 테스트 회원 생성
+
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setItemId(item.getId());
+        orderDTO.setCount(10);
+
+        Long orderId = orderService.order(orderDTO, member.getEmail()); // 주문 데이터 생성
+
+        Order order = orderRepository.findById(orderId) // 방금 생성한 주문을 DB에서 조회
+                .orElseThrow(EntityNotFoundException::new);
+        orderService.cancelOrder(orderId); // 방금 생성한 주문 취소함
+
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus()); // 주문 취소 후 주문 상태가 취소 상태인지 확인
+        assertEquals(100, item.getStockNumber()); // 주문 취소 후 테스트 상품의 재고가 처음과 같은지 확인
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

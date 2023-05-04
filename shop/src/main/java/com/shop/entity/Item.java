@@ -61,6 +61,11 @@ public class Item extends BaseEntity{
 
         this.stockNumber = restStock; // 성공적으로 재고가 감소되면 엔티티를 변화시킴.
     }
+
+    // 상품의 재고를 증가시키는 메소드
+    public void addStock(int stockNumber){
+        this.stockNumber += stockNumber;
+    }
 }
 
 
