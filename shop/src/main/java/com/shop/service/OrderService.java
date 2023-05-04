@@ -106,6 +106,30 @@ public class OrderService {
 
         order.cancelOrder();
     }
+
+    // 여러 개 한 번에 주문하는 메소드
+    // 주문 정보(OrderDTO) 리스트, email을 매개변수로 받는다
+    public Long orders(List<OrderDTO> orderDTOList, String email){
+
+        Member member = memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList = new ArrayList<>(); // 주문 상품 리스트
+
+        // 주문 정보를 순회하면서 주문 상품 엔티티를 만듦
+        for(OrderDTO orderDTO : orderDTOList){
+            Item item = itemRepository.findById(orderDTO.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            // 주문 상품 엔티티를 생성한다
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDTO.getCount());
+            orderItemList.add(orderItem); // 생성한 주문 상품 엔티티를 주문 상품 리스트에 추가
+        }
+
+        // 로그인한 회원과 주문 상품 목록을 이용해 주문 엔티티를 만듦
+        Order order = Order.createOrder(member, orderItemList);
+        orderRepository.save(order); // DB에 반영
+
+        return order.getId();
+    }
 }
 
 

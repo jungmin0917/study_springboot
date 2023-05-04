@@ -2,6 +2,7 @@ package com.shop.controller;
 
 import com.shop.dto.CartDetailDTO;
 import com.shop.dto.CartItemDTO;
+import com.shop.dto.CartOrderDTO;
 import com.shop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -93,6 +94,30 @@ public class CartController {
 
         cartService.deleteCartItem(cartItemId); // 해당 장바구니 상품을 삭제함
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/cart/orders")
+    @ResponseBody
+    public ResponseEntity orderCartItem(@RequestBody CartOrderDTO cartOrderDTO, Principal principal){
+
+        List<CartOrderDTO> cartOrderDTOList = cartOrderDTO.getCartOrderDTOList();
+
+        // 주문할 상품이 하나도 없을 시
+        if(cartOrderDTOList == null || cartOrderDTOList.size() == 0){
+            return new ResponseEntity<String>("주문할 상품을 선택해주세요", HttpStatus.FORBIDDEN);
+        }
+
+        // 주문 순회하면서 해당 주문 상품의 주인이 현재 사용자와 같은지 확인함
+        for(CartOrderDTO cartOrder : cartOrderDTOList){
+            if(!cartService.validateCartItem(cartOrder.getCartItemId(), principal.getName())){
+                return new ResponseEntity<String>("주문 권한이 없습니다", HttpStatus.FORBIDDEN);
+            }
+        }
+
+        // 주문 로직을 호출한다
+        Long orderId = cartService.orderCartItem(cartOrderDTOList, principal.getName());
+
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 }
 

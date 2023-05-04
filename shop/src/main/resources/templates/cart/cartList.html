@@ -121,24 +121,25 @@
             });
         }
 
-        // 주문하는 메소드
+        // 선택된 상품 주문하는 메소드
         function orders(){
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
             var url = "/cart/orders";
 
-            var dataList = new Array();
-            var paramData = new Object();
+            var dataList = new Array(); // cartOrderDTOList로 사용할 배열
+            var paramData = new Object(); // 자바스크립트 객체 형태로 만들어서 JSON으로 변환 후 요청할 예정임
 
-            $("input[name=cartChkBox]:checked").each(function() {
+            // 체크박스 중 선택된 것들을 순회하면서 cartOrderDTOList를 완성한다
+            $("input[name='cartChkBox']:checked").each(function() {
                 var cartItemId = $(this).val();
-                var data = new Object();
-                data["cartItemId"] = cartItemId;
-                dataList.push(data);
+                var data = new Object(); // cartOrderDTO로 사용할 배열
+                data["cartItemId"] = cartItemId; // cartOrderDTO의 cartItemId 필드에 cartItemId로 설정한다.
+                dataList.push(data); // cartOrderDTOList에 cartOrderDTO를 추가한다.
             });
 
-            paramData['cartOrderDtoList'] = dataList;
+            paramData['cartOrderDTOList'] = dataList; // cartOrderDTOList 속성에 dataList를 설정
 
             var param = JSON.stringify(paramData);
 
@@ -147,15 +148,15 @@
                 type     : "POST",
                 contentType : "application/json",
                 data     : param,
+                dataType : "JSON",
+                cache   : false,
                 beforeSend : function(xhr){
                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
                     xhr.setRequestHeader(header, token);
                 },
-                dataType : "json",
-                cache   : false,
                 success  : function(result, status){
                     alert("주문이 완료 되었습니다.");
-                    location.href='/orders';
+                    location.href='/orders'; // 주문이 성공하였으면 구매 이력 페이지로 이동함
                 },
                 error : function(jqXHR, status, error){
 

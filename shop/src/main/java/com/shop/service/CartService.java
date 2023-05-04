@@ -2,6 +2,8 @@ package com.shop.service;
 
 import com.shop.dto.CartDetailDTO;
 import com.shop.dto.CartItemDTO;
+import com.shop.dto.CartOrderDTO;
+import com.shop.dto.OrderDTO;
 import com.shop.entity.Cart;
 import com.shop.entity.CartItem;
 import com.shop.entity.Item;
@@ -28,6 +30,7 @@ public class CartService {
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderService orderService;
 
     // 장바구니 상품 DTO와 사용자 이메일을 이용하여 장바구니에 상품 추가
     public Long addCart(CartItemDTO cartItemDTO, String email){
@@ -106,6 +109,38 @@ public class CartService {
                 .orElseThrow(EntityNotFoundException::new);
 
         cartItemRepository.delete(cartItem);
+    }
+
+    // 장바구니 페이지로부터 넘어온 CartOrderDTOList, 이메일을 이용해 OrderService의 주문 로직을 호출함
+    public Long orderCartItem(List<CartOrderDTO> cartOrderDTOList, String email){
+        // 주문 정보를 담고 있는 List 선언
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+
+        // 장바구니 주문 정보를 순회한다
+        for(CartOrderDTO cartOrderDTO : cartOrderDTOList){
+            // 장바구니 상품 조회
+            CartItem cartItem = cartItemRepository.findById(cartOrderDTO.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            // 주문 DTO 생성
+            OrderDTO orderDTO = new OrderDTO();
+            orderDTO.setItemId(cartItem.getItem().getId());
+            orderDTO.setCount(cartItem.getCount());
+            orderDTOList.add(orderDTO); // 주문 정보 List에 추가
+        }
+
+        // 장바구니에서 선택한 상품을 주문하도록 주문 로직을 호출한다
+        Long orderId = orderService.orders(orderDTOList, email);
+
+        // 주문 후 장바구니 주문 정보를 순회하면서 해당 장바구니 상품을 장바구니에서 제거한다.
+        for(CartOrderDTO cartOrderDTO : cartOrderDTOList){
+            CartItem cartItem = cartItemRepository.findById(cartOrderDTO.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            cartItemRepository.delete(cartItem);
+        }
+
+        return orderId;
     }
 }
 
