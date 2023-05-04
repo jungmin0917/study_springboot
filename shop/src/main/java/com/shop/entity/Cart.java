@@ -19,5 +19,17 @@ public class Cart extends BaseEntity{
     @JoinColumn(name = "member_id") // 매핑할 외래키 지정. name 속성에는 매핑할 외래키의 이름을 설정한다. @JoinColumn의 name을 명시하지 않으면 JPA가 알아서 ID를 찾지만, 컬럼명이 원하는 대로 생성되지 않을 경우를 대비해 직접 명시했다.
     private Member member; // 매핑할 때는 상대의 엔티티를 선언한다.
 
-
+    // 해당 회원의 장바구니 엔티티를 생성하는 메소드
+    public static Cart createCart(Member member){
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 }
+
+
+
+
+
+
+
